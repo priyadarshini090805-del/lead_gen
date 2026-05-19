@@ -1,0 +1,85 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --bg: #fafafa;
+  --bg-2: #f0f0f3;
+  --glass: rgba(255, 255, 255, 0.55);
+  --glass-border: rgba(255, 255, 255, 0.65);
+  --ring: rgba(245, 166, 35, 0.4);
+}
+
+* { box-sizing: border-box; }
+
+html, body {
+  background: linear-gradient(180deg, var(--bg) 0%, var(--bg-2) 100%);
+  color: #18181b;
+  min-height: 100vh;
+  font-family: -apple-system, BlinkMacSystemFont, "Inter", "Segoe UI", Roboto, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Ambient blurred shapes for glassmorphism backdrop */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  background-image:
+    radial-gradient(circle at 12% 18%, rgba(245, 166, 35, 0.10), transparent 38%),
+    radial-gradient(circle at 88% 8%, rgba(120, 130, 200, 0.10), transparent 42%),
+    radial-gradient(circle at 70% 90%, rgba(200, 180, 120, 0.08), transparent 45%);
+}
+
+@layer components {
+  .glass {
+    background: var(--glass);
+    backdrop-filter: blur(18px) saturate(140%);
+    -webkit-backdrop-filter: blur(18px) saturate(140%);
+    border: 1px solid var(--glass-border);
+    box-shadow:
+      0 8px 32px 0 rgba(31, 38, 135, 0.08),
+      inset 0 1px 0 rgba(255, 255, 255, 0.6);
+  }
+  .glass-strong {
+    background: rgba(255, 255, 255, 0.7);
+    backdrop-filter: blur(24px) saturate(160%);
+    -webkit-backdrop-filter: blur(24px) saturate(160%);
+    border: 1px solid rgba(255, 255, 255, 0.7);
+  }
+  .glass-card {
+    @apply glass rounded-2xl;
+  }
+  .skeleton {
+    background: linear-gradient(90deg, #f0f0f3 0%, #fafafa 50%, #f0f0f3 100%);
+    background-size: 1000px 100%;
+    animation: shimmer 2s linear infinite;
+  }
+  .chip {
+    @apply inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-medium border;
+  }
+  .chip-grey { @apply chip bg-ink-100/60 text-ink-700 border-ink-200; }
+  .chip-amber { @apply chip bg-accent-50 text-accent-600 border-accent/30; }
+  .chip-green { @apply chip bg-emerald-50 text-emerald-700 border-emerald-200; }
+  .chip-blue { @apply chip bg-blue-50 text-blue-700 border-blue-200; }
+  .chip-purple { @apply chip bg-purple-50 text-purple-700 border-purple-200; }
+}
+
+/* Scrollbar */
+::-webkit-scrollbar { width: 10px; height: 10px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: rgba(0,0,0,0.08); border-radius: 8px; }
+::-webkit-scrollbar-thumb:hover { background: rgba(0,0,0,0.16); }
+
+/* Focus */
+:focus-visible {
+  outline: 2px solid var(--ring);
+  outline-offset: 2px;
+  border-radius: 6px;
+}
+
+/* Page transition utility */
+.page-enter { opacity: 0; transform: translateY(8px); }
+.page-enter-active { opacity: 1; transform: translateY(0); transition: all .25s ease; }
