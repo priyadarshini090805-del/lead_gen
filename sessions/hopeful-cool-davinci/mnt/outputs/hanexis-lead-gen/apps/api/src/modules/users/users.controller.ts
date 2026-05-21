@@ -1,17 +1,47 @@
-import { Controller, Get, UseGuards } from "@nestjs/common";
-import { ApiTags, ApiBearerAuth } from "@nestjs/swagger";
-import { JwtAuthGuard } from "../auth/guards/jwt-auth.guard";
+import {
+  Body,
+  Controller,
+  Get,
+  Param,
+  Post,
+} from "@nestjs/common";
+
 import { UsersService } from "./users.service";
 
-@ApiTags("users")
-@ApiBearerAuth()
-@UseGuards(JwtAuthGuard)
 @Controller("users")
 export class UsersController {
-  constructor(private readonly users: UsersService) {}
+
+  constructor(
+    private readonly usersService: UsersService,
+  ) {}
 
   @Get()
-  list() {
-    return this.users.list();
+  async findAll() {
+    return this.usersService.findAll();
+  }
+
+  @Get(":id")
+  async findOne(
+    @Param("id") id: string,
+  ) {
+    return this.usersService.findOne(id);
+  }
+
+  @Post("register")
+  async register(
+    @Body() body: any,
+  ) {
+    return this.usersService.register(body);
+  }
+
+  @Post("login")
+  async login(
+    @Body() body: any,
+  ) {
+
+    return this.usersService.login(
+      body.email,
+      body.password,
+    );
   }
 }
